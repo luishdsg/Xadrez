@@ -1,21 +1,41 @@
-<div class="board">
+<div class="board-wrapper" [style.gridTemplateColumns]="'repeat(' + cols + ', ' + cellSize + 'px)'">
   <div *ngFor="let row of board(); let y = index" class="row">
-    <div
-      *ngFor="let cell of row; let x = index"
-      class="cell"
-      [class.highlight]="isHighlighted(x, y)"
-      (click)="clearHighlights()"
-    >
-      <div
-        *ngIf="cell"
-        class="piece"
-        cdkDrag
-        #dragRef="cdkDrag"
-        (cdkDragStarted)="onDragStart(x, y)"
-        (cdkDragEnded)="onDragEnd($event, x, y, dragRef)"
-      >
-        {{ cell.type[0].toUpperCase() }}
+    <div *ngFor="let piece of row; let x = index" class="cell" [class.highlight]="isHighlighted(x, y)"
+      [class.selected]="isSelected(x, y)">
+
+      <!-- Coordenada A1, B3 etc -->
+      <div class="cell-label">
+        {{ getColumnLabel(x) }}{{ y + 1 }}
+      </div>
+
+      <!-- Peça -->
+      <div *ngIf="piece" class="piece" cdkDrag #dragRef="cdkDrag" (cdkDragStarted)="onDragStart(x, y)"
+        (cdkDragEnded)="onDragEnd($event, x, y, dragRef)" [ngStyle]="{ backgroundColor: piece.player }">
+        {{ piece.type[0].toUpperCase() }}
       </div>
     </div>
+  </div>
+  <div class="board-controls">
+    <p>Escolha o tamanho do tabuleiro:</p>
+
+    <label>
+      Linhas:
+      <input type="number" [(ngModel)]="inputRows" (input)="validateDimensions()" />
+    </label>
+    <div *ngIf="rowError" class="error-message">
+      <small>{{ rowError }}</small>
+    </div>
+
+    <label>
+      Colunas:
+      <input type="number" [(ngModel)]="inputCols" (input)="validateDimensions()" />
+    </label>
+    <div *ngIf="colError" class="error-message">
+      <small>{{ colError }}</small>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="applyBoardSize()" [disabled]="dimensionError">
+      Aplicar
+    </button>
   </div>
 </div>
