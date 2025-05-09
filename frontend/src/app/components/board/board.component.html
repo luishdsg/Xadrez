@@ -1,20 +1,27 @@
 <div class="board-wrapper" [style.gridTemplateColumns]="'repeat(' + cols + ', ' + cellSize + 'px)'">
   <div *ngFor="let row of board(); let y = index" class="row">
     <div *ngFor="let piece of row; let x = index" class="cell" [class.highlight]="isHighlighted(x, y)"
-      [class.selected]="isSelected(x, y)">
+      [class.selected]="isSelected(x, y)" [class.target-moved]="lastTargetCell?.x === x && lastTargetCell?.y === y"
+      [class.last-moved]="lastMovedCell?.x === x && lastMovedCell?.y === y">
 
-      <!-- Coordenada A1, B3 etc -->
-      <div class="cell-label">
-        {{ getColumnLabel(x) }}{{ y + 1 }}
+     <div *ngIf="y === rows - 1" class="cell-label-bottom">
+        {{ getColumnLabel(x) }}
+      </div>
+      <div *ngIf="x === 0" class="cell-label-left">
+        {{ rows - y }}
       </div>
 
       <!-- Peça -->
       <div *ngIf="piece" class="piece" cdkDrag #dragRef="cdkDrag" (cdkDragStarted)="onDragStart(x, y)"
-        (cdkDragEnded)="onDragEnd($event, x, y, dragRef)" [ngStyle]="{ backgroundColor: piece.player }">
+        (cdkDragEnded)="onDragEnd($event, x, y, dragRef)" [ngStyle]="{ backgroundColor: piece.player }" [cdkDragDisabled]="!gameStarted">
         {{ piece.type[0].toUpperCase() }}
       </div>
     </div>
   </div>
+  <div *ngIf="moveWarning" class="move-warning">
+    {{ moveWarning }}
+  </div>
+
   <div class="board-controls">
     <p>Escolha o tamanho do tabuleiro:</p>
 
@@ -36,6 +43,9 @@
 
     <button mat-raised-button color="primary" (click)="applyBoardSize()" [disabled]="dimensionError">
       Aplicar
+    </button>
+    <button mat-raised-button color="primary" (click)="startGame()" [disabled]="!canStartGame">
+      Iniciar
     </button>
   </div>
 </div>

@@ -14,9 +14,10 @@ import { PopUpComponent } from '../../shared/pop-up/pop-up.component';
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent {
+  canStartGame = false;
+  gameStarted = false;
   boardSize = 8;
   board = signal<(Piece | null)[][]>([]);
-
   validSizes: { rows: number; cols: number }[] = [
     { rows: 6, cols: 6 },
     { rows: 6, cols: 8 },
@@ -32,11 +33,14 @@ export class BoardComponent {
   dimensionError: boolean = false;
   inputRows: number = 6;
   inputCols: number = 6;
+  lastMovedCell?: { x: number; y: number };
+  lastTargetCell?: { x: number; y: number };
   rowError: string = '';
   colError: string = '';
   currentTurn: string = 'white';
   highlights = signal<boolean[][]>([]);
   showPopup: boolean = false;
+  moveWarning: string | null = null;
 
   constructor(
     private gameService: GameService,
@@ -49,15 +53,20 @@ export class BoardComponent {
     this.board.set(this.gameService.getBoard());
   }
 
-
+  startGame() {
+    this.canStartGame = false;
+    this.gameStarted = true;
+    this.resetBoard(this.rows, this.cols);
+    this.currentTurn = 'white';
+  }
 
   applyBoardSize() {
     this.validateDimensions();
     if (this.dimensionError) return;
 
     this.changeBoardSize(this.inputRows, this.inputCols);
+    this.canStartGame = true;
   }
-
   validateDimensions() {
     this.dimensionError = false;
     this.rowError = '';
@@ -100,18 +109,24 @@ export class BoardComponent {
 
   onDragStart(x: number, y: number) {
     const piece = this.board()[y][x];
-
     if (!piece) return;
 
-    this.selectedPiece.set({ x, y, piece });
+    if (piece.player !== this.currentTurn) {
+      this.moveWarning = `É a vez das peças ${this.currentTurn === 'white' ? 'brancas' : 'pretas'}.`;
+      return;
+    }
 
+    this.moveWarning = null; // limpa o aviso se estiver tudo certo
+    this.selectedPiece.set({ x, y, piece });
     const rawBoard = this.board();
     const moves = this.gameService.getValidMoves(piece, x, y, rawBoard, this.rows, this.cols);
     this.validMoves.set(moves);
   }
 
+
+
   getColumnLabel(index: number): string {
-    return String.fromCharCode(65 + index); // A, B, C, ...
+    return String.fromCharCode(97 + index); // a, b, c, ...
   }
 
   clearHighlights() {
@@ -152,8 +167,6 @@ export class BoardComponent {
 
   onDragEnd(event: CdkDragEnd, fromX: number, fromY: number, dragRef: CdkDrag<any>) {
     const pieceRect = event.source.getRootElement().getBoundingClientRect();
-
-    // Ponto central da peça
     const centerX = pieceRect.left + pieceRect.width / 2;
     const centerY = pieceRect.top + pieceRect.height / 2;
 
@@ -176,38 +189,58 @@ export class BoardComponent {
       }
     });
 
-    // Se nenhuma célula válida foi encontrada, volta
     if (targetX === -1 || targetY === -1) {
       dragRef.reset();
       return;
     }
 
-    // Verifica se é movimento válido
+    const piece = this.board()[fromY][fromX];
+    if (!piece || piece.player !== this.currentTurn) {
+      alert(`É a vez das peças ${this.currentTurn === 'white' ? 'brancas' : 'pretas'}.`);
+      dragRef.reset();
+      return;
+    }
+
     const isValid = this.validMoves().some(pos => pos.x === targetX && pos.y === targetY);
     if (!isValid) {
       dragRef.reset();
       return;
     }
+    this.lastMovedCell = { x: fromX, y: fromY };
+    this.lastTargetCell = { x: targetX, y: targetY };
+    setTimeout(() => {
+      this.lastMovedCell = undefined;
+      this.lastTargetCell = undefined;
+    }, 3000);
 
-    // Atualiza o board lógico
     const boardCopy = this.board().map(row => [...row]);
-    const piece = boardCopy[fromY][fromX];
-    if (!piece) {
-      dragRef.reset();
-      return;
+    const targetPiece = boardCopy[targetY][targetX];
+    if (targetPiece && targetPiece.player !== piece.player) {
+      console.log(`Peça capturada: ${targetPiece.type} (${targetPiece.player}) na posição (${targetX}, ${targetY})`);
+
+      // Checa se é um product-owner
+      if (targetPiece.type === 'product-owner') {
+        this.dialog.open(PopUpComponent, {
+          data: {
+            player: piece.player,
+            type: piece.type
+          }
+        });
+      }
     }
 
     boardCopy[fromY][fromX] = null;
     boardCopy[targetY][targetX] = piece;
-    this.board.set(boardCopy);
 
-    // Limpa estados
+    this.board.set(boardCopy);
     this.selectedPiece.set(undefined);
     this.validMoves.set([]);
     this.clearHighlights();
-    this.toggleTurn();
-    dragRef.reset(); // Reposiciona visualmente
+    this.currentTurn = this.currentTurn === 'white' ? 'black' : 'white';
+    dragRef.reset();
   }
+
+
 
 
 }

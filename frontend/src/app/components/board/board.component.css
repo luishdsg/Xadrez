@@ -1,6 +1,7 @@
 .board {
   display: grid;
 }
+
 .cell {
   position: relative;
   width: 40px;
@@ -11,6 +12,22 @@
   justify-content: center;
 }
 
+.cell-label-bottom {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+}
+
+.cell-label-left {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  transform: translateY(-50%);
+  font-size: 12px;
+}
+
 .cell-label {
   position: absolute;
   bottom: 2px;
@@ -19,10 +36,22 @@
   color: #444;
   pointer-events: none;
 }
+.cell.last-moved,
+.cell.target-moved {
+  background-color: rgba(255, 0, 0, 0.3);
+  transition: background-color 0.5s ease;
+}
+.move-warning {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
 
 .row {
-  display: contents; /* Para que as células fiquem diretamente na grid */
+  display: contents;
+  /* Para que as células fiquem diretamente na grid */
 }
+
 .error-message {
   color: red;
   font-size: 0.9em;
@@ -71,7 +100,8 @@
 }
 
 .cell.selected {
-  background-color: rgba(128, 0, 128, 0.3); /* roxo claro */
+  background-color: rgba(128, 0, 128, 0.3);
+  /* roxo claro */
 }
 
 .board-controls {
@@ -91,4 +121,3 @@
 .board-controls button:hover {
   background-color: #666;
 }
-
