@@ -2,11 +2,43 @@
   display: grid;
 }
 
-.cell {
+.board-wrapper {
+  display: inline-block;
+
+}
+
+
+.justify-items-center {
+  justify-items: center;
+}
+
+.content-game {
+  width: fit-content;
+  border: 2px solid rgba(255, 255, 255, 0.329);
   position: relative;
-  width: 40px;
-  height: 40px;
-  border: 1px solid #ccc;
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.black {
+  background-image: url('../../assets/blackzone.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.white {
+  background-image: url('../../assets/whitezone.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.cell-table {
+  opacity: .60;
+  position: relative;
+  width: 102px;
+  height: 102px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,21 +46,21 @@
 
 .cell-label-bottom {
   position: absolute;
-  bottom: 2px;
-  left: 50%;
+  right: 5%;
+  bottom: 5%;
   transform: translateX(-50%);
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .cell-label-left {
   position: absolute;
-  top: 50%;
-  left: 2px;
+  left: 10%;
+  top: 15%;
   transform: translateY(-50%);
-  font-size: 12px;
+  font-size: 11px;
 }
 
-.cell-label {
+.cell-table-label {
   position: absolute;
   bottom: 2px;
   left: 2px;
@@ -36,20 +68,36 @@
   color: #444;
   pointer-events: none;
 }
-.cell.last-moved,
-.cell.target-moved {
-  background-color: rgba(255, 0, 0, 0.3);
+
+.cell-table.white-moved {
+  background-image: url('../../assets/safezonewhite.png') !important;
+  background-position: center;
+  background-size: auto;
+  background-repeat: no-repeat;
   transition: background-color 0.5s ease;
 }
+
+.cell-table.black-moved {
+  background-image: url('../../assets/safezone.png') !important;
+  background-position: center;
+  background-size: auto;
+  border: 1px solid rgba(145, 94, 0, 0.377);
+  background-repeat: no-repeat;
+  transition: background-color 0.5s ease;
+}
+
+
+
 .move-warning {
   color: red;
   font-weight: bold;
   margin-top: 10px;
 }
 
-.row {
+.row-table {
   display: contents;
-  /* Para que as células fiquem diretamente na grid */
+  display: flex;
+
 }
 
 .error-message {
@@ -57,7 +105,6 @@
   font-size: 0.9em;
   margin-top: 4px;
 }
-
 
 .piece {
   width: 100%;
@@ -67,19 +114,16 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  color: white;
+  cursor: grab;
+  transition: transform 0.2s ease;
 }
 
-.board-wrapper {
-  display: inline-block;
-
+.img-piece {
+  width: 43px;
 }
 
-.row {
-  display: flex;
-}
 
-.header-cell {
+.header-cell-table {
   width: 40px;
   height: 40px;
   text-align: center;
@@ -89,23 +133,64 @@
   border: 1px solid #ccc;
 }
 
-.corner-cell {
+.corner-cell-table {
   width: 40px;
   height: 40px;
 }
 
 
-.cell.highlight {
-  background-color: rgba(0, 255, 0, 0.3);
+.cell-table.highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/overlay.png') !important;
+  background-position: center;
+  background-size: auto;
+  background-repeat: no-repeat;
+  z-index: 1;
 }
 
-.cell.selected {
-  background-color: rgba(128, 0, 128, 0.3);
+.cell-table.selected {
+  background-color: rgba(128, 0, 128, 0.3) !important;
   /* roxo claro */
 }
 
-.board-controls {
-  margin-bottom: 1rem;
+.play-btn:before {
+  content: "";
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 182px;
+  opacity: 0.12;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+
+}
+.play-btn {
+  background: radial-gradient(circle, #7D89C4 30%, #4967FE 100%);
+  background-position: top ;
+  border: 2px solid #ffffff9f !important;
+  border-radius: 10px !important;
+  background-size: contain;
+
+  background-repeat: no-repeat;
+}
+.play-btn h6{
+   text-shadow: 0px 0px 5px #ffffff;
+}
+.bg-input-scale {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.040) !important;
+  backdrop-filter: blur(50px);
+  border-radius: 9px;
+  color:  rgba(255, 255, 255, 0.418);
+  border: 2px solid rgba(255, 255, 255, 0.182);
 }
 
 .board-controls button {

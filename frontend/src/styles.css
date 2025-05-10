@@ -1,4 +1,87 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+label{
+  font-size: 17px;
+}
+body {
+  margin: 0;
+  font-family: "Kanit", sans-serif;
+  font-style: normal;
+}
+
+.kanit-light {
+  font-family: "Kanit", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.kanit-regular {
+  font-family: "Kanit", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.kanit-medium {
+  font-family: "Kanit", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.kanit-extrabold {
+  font-family: "Kanit", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+/* .main-content {
+  background-image: url('./app/assets/bgg.png'), url('https://grainy-gradients.vercel.app/noise.svg')  ;
+  background-position: center, center;
+  background-size: auto, auto;
+  background-repeat: no-repeat, no-repeat;
+} */
+.main-content:before {
+  content: "";
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 182px;
+  opacity: 0.12;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+}
+.main-content {
+  background-image: url('./app/assets/bg.png');
+  background-position: top ;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.top-left-corner {
+  border-radius: 5px 0px 0px 0px !important;
+}
+
+.top-right-corner {
+  border-radius: 0px 5px 0px 0px !important;
+}
+
+.bottom-left-corner {
+  border-radius: 0px 0px 0px 5px !important;
+}
+
+.bottom-right-corner {
+  border-radius: 0px 0px 5px 0px !important;
+}
+
+.turn-indicator {
+  font-weight: bold;
+  font-size: 1.2rem;
+}

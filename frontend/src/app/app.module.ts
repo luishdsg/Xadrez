@@ -5,7 +5,7 @@ import { BoardComponent } from './components/board/board.component';
 import { PieceComponent } from './components/piece/piece.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatButtonModule } from '@angular/material/button';
-import { PopUpComponent } from './shared/pop-up/pop-up.component';
+import { PopUpComponent } from './services/components/pop-up/pop-up.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 

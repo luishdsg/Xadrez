@@ -1,15 +1,15 @@
-import { CdkDrag, CdkDragEnd, DragDropModule } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragEnd, CdkDragStart, DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { Player, GameService, Piece, Position } from '../../services/game.service';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { PopUpComponent } from '../../shared/pop-up/pop-up.component';
+import { PopUpComponent } from '../../shared/components/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgFor, NgIf, DragDropModule, PopUpComponent],
+  imports: [CommonModule, FormsModule, NgFor, NgIf, DragDropModule],
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
@@ -28,45 +28,54 @@ export class BoardComponent {
   selectedPiece = signal<{ x: number, y: number, piece: Piece } | undefined>(undefined);
   validMoves = signal<Position[]>([]);
   cellSize = 60;
-  rows: number = 8;
-  cols: number = 8;
+  rows: number = 6;
+  cols: number = 6;
   dimensionError: boolean = false;
   inputRows: number = 6;
   inputCols: number = 6;
-  lastMovedCell?: { x: number; y: number };
-  lastTargetCell?: { x: number; y: number };
+  previousPosition: { x: number; y: number; } | undefined;
+  lastMovedCell?: { x: number; y: number; };
+  lastTargetCell?: { x: number; y: number; };
+
   rowError: string = '';
   colError: string = '';
   currentTurn: string = 'white';
   highlights = signal<boolean[][]>([]);
   showPopup: boolean = false;
   moveWarning: string | null = null;
+  historic: any;
 
   constructor(
     private gameService: GameService,
     private dialog: MatDialog
   ) {
-    this.resetBoard(6, 6); // Tamanho inicial
   }
 
   ngOnInit() {
+    this.resetBoard(6, 6); // Tamanho inicial
+    this.rows = 6;
+    this.cols = 6;
     this.board.set(this.gameService.getBoard());
+    this.gameService.getGameState().subscribe(response => {
+      console.log('Estado do jogo recebido:', response);
+      // this.board.set(response);
+    });
   }
 
   startGame() {
     this.canStartGame = false;
     this.gameStarted = true;
     this.resetBoard(this.rows, this.cols);
-    this.currentTurn = 'white';
+    this.currentTurn = 'white'; // <- Certo, começa com as brancas
   }
 
-  applyBoardSize() {
-    this.validateDimensions();
-    if (this.dimensionError) return;
 
+  applyBoardSize() {
     this.changeBoardSize(this.inputRows, this.inputCols);
     this.canStartGame = true;
   }
+
+  
   validateDimensions() {
     this.dimensionError = false;
     this.rowError = '';
@@ -81,6 +90,19 @@ export class BoardComponent {
       this.colError = 'As colunas devem estar entre 6 e 12.';
       this.dimensionError = true;
     }
+  }
+  getCellClass(x: number, y: number): string {
+    // // Estilo temporário da origem
+    // if (this.lastMovedCell?.x === x && this.lastMovedCell?.y === y) {
+    //   return (x + y) % 2 === 0 ? 'cell.black-moved' : 'cell.white-moved';
+    // }
+
+    // // Estilo temporário do destino
+    // if (this.lastTargetCell?.x === x && this.lastTargetCell?.y === y) {
+    //   return (x + y) % 2 === 0 ? 'cell.black-moved' : 'cell.white-moved';
+    // }
+
+    return (x + y) % 2 === 0 ? 'white' : 'black';
   }
 
   changeBoardSize(rows: number, cols: number) {
@@ -97,7 +119,19 @@ export class BoardComponent {
     this.cols = cols;
     this.gameService.resetBoard(rows, cols);
     this.board.set(this.gameService.getBoard());
+ const boardSetup = this.board().map((row, y) =>
+      row.map((piece) => {
+        if (piece) {
+          piece.player = y < rows / 2 ? 'black' : 'white';
+        }
+        return piece;
+      })
+    );
+
+    this.board.set(boardSetup);
   }
+
+
   isSelected(x: number, y: number): boolean {
     const selected = this.selectedPiece();
     return selected?.x === x && selected?.y === y;
@@ -153,9 +187,27 @@ export class BoardComponent {
   }
 
 
+  getCornerClass(x: number, y: number): string {
+    const lastRow = this.rows - 1;
+    const lastCol = this.cols - 1;
+
+    if (x === 0 && y === 0) return 'top-left-corner';
+    if (x === lastCol && y === 0) return 'top-right-corner';
+    if (x === 0 && y === lastRow) return 'bottom-left-corner';
+    if (x === lastCol && y === lastRow) return 'bottom-right-corner';
+
+    return '';
+  }
 
 
+ restrictToNumbers(event: KeyboardEvent) {
+    const allowedKeys = ["Backspace", "ArrowLeft", "ArrowRight", "Tab"];
+    if (allowedKeys.includes(event.key)) return;
 
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
   getPiecePlayer(piece: Piece | null): string {
     const colorMap: Record<Player, string> = {
       white: '#fff',
@@ -164,7 +216,9 @@ export class BoardComponent {
     return piece ? colorMap[piece.player] : '#bdc3c7'; // fallback cinza
   }
 
-
+  onDragStarted(event: CdkDragStart<any>) {
+    this.previousPosition = { x: event.source.getRootElement().getBoundingClientRect().x, y: event.source.getRootElement().getBoundingClientRect().y };
+  }
   onDragEnd(event: CdkDragEnd, fromX: number, fromY: number, dragRef: CdkDrag<any>) {
     const pieceRect = event.source.getRootElement().getBoundingClientRect();
     const centerX = pieceRect.left + pieceRect.width / 2;
@@ -173,7 +227,7 @@ export class BoardComponent {
     let targetX = -1;
     let targetY = -1;
 
-    const cells = document.querySelectorAll('.cell');
+    const cells = document.querySelectorAll('.cell-table');
     cells.forEach((cell: Element, index: number) => {
       const rect = cell.getBoundingClientRect();
       if (
@@ -196,7 +250,6 @@ export class BoardComponent {
 
     const piece = this.board()[fromY][fromX];
     if (!piece || piece.player !== this.currentTurn) {
-      alert(`É a vez das peças ${this.currentTurn === 'white' ? 'brancas' : 'pretas'}.`);
       dragRef.reset();
       return;
     }
@@ -206,12 +259,17 @@ export class BoardComponent {
       dragRef.reset();
       return;
     }
+    // Determina se as células são pretas
     this.lastMovedCell = { x: fromX, y: fromY };
     this.lastTargetCell = { x: targetX, y: targetY };
+
     setTimeout(() => {
       this.lastMovedCell = undefined;
       this.lastTargetCell = undefined;
-    }, 3000);
+      this.board.set([...this.board()]); // força re-renderização
+    }, 1000);
+
+
 
     const boardCopy = this.board().map(row => [...row]);
     const targetPiece = boardCopy[targetY][targetX];
@@ -220,6 +278,9 @@ export class BoardComponent {
 
       // Checa se é um product-owner
       if (targetPiece.type === 'product-owner') {
+        // this.gameService.saveGameState(this.board()).subscribe(response => {
+        //   alert('Jogo salvo com sucesso!');
+        // });
         this.dialog.open(PopUpComponent, {
           data: {
             player: piece.player,
@@ -231,16 +292,11 @@ export class BoardComponent {
 
     boardCopy[fromY][fromX] = null;
     boardCopy[targetY][targetX] = piece;
-
-    this.board.set(boardCopy);
-    this.selectedPiece.set(undefined);
-    this.validMoves.set([]);
-    this.clearHighlights();
-    this.currentTurn = this.currentTurn === 'white' ? 'black' : 'white';
-    dragRef.reset();
+  this.board.set(boardCopy);
+this.selectedPiece.set(undefined);
+this.validMoves.set([]);
+this.clearHighlights();
+this.currentTurn = this.currentTurn === 'white' ? 'black' : 'white';
   }
-
-
-
 
 }

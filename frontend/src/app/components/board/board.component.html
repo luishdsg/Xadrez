@@ -1,51 +1,94 @@
-<div class="board-wrapper" [style.gridTemplateColumns]="'repeat(' + cols + ', ' + cellSize + 'px)'">
-  <div *ngFor="let row of board(); let y = index" class="row">
-    <div *ngFor="let piece of row; let x = index" class="cell" [class.highlight]="isHighlighted(x, y)"
-      [class.selected]="isSelected(x, y)" [class.target-moved]="lastTargetCell?.x === x && lastTargetCell?.y === y"
-      [class.last-moved]="lastMovedCell?.x === x && lastMovedCell?.y === y">
+<div class="board-wrapper  justify-items-center"
+  [style.gridTemplateColumns]="'repeat(' + cols + ', ' + cellSize + 'px)'">
+  <div>
+    <div class="historico">
+      <h2>Histórico de plays</h2>
+      <!-- <ul>
+    <li *ngFor="let play of historic; let i = index">
+      {{ i + 1 }}. Peça: {{ play.piece }}, Jogador: {{ play.player }}, De: ({{ play.from.x }}, {{ play.from.y }}), Para: ({{ play.to.x }}, {{ play.to.y }})
+    </li>
+  </ul> -->
+    </div>
+  </div>
 
-     <div *ngIf="y === rows - 1" class="cell-label-bottom">
-        {{ getColumnLabel(x) }}
-      </div>
-      <div *ngIf="x === 0" class="cell-label-left">
-        {{ rows - y }}
-      </div>
+  <div class="content-game p-1 rounded-3 d-block">
+    <div *ngFor="let row of board(); let y = index" class="row-table">
+      <div *ngFor="let piece of row; let x = index" class="cell-table"
+        [ngClass]="[getCellClass(x, y), getCornerClass(x, y)]" [class.highlight]="isHighlighted(x, y)"
+        [class.selected]="isSelected(x, y)" [class.black-moved]="lastTargetCell?.x === x && lastTargetCell?.y === y"
+        [class.white-moved]="lastMovedCell?.x === x && lastMovedCell?.y === y">
 
-      <!-- Peça -->
-      <div *ngIf="piece" class="piece" cdkDrag #dragRef="cdkDrag" (cdkDragStarted)="onDragStart(x, y)"
-        (cdkDragEnded)="onDragEnd($event, x, y, dragRef)" [ngStyle]="{ backgroundColor: piece.player }" [cdkDragDisabled]="!gameStarted">
-        {{ piece.type[0].toUpperCase() }}
+        <div *ngIf="y === rows - 1" class="kanit-medium cell-label-bottom">
+          {{ getColumnLabel(x).toUpperCase() }}
+        </div>
+        <div *ngIf="x === 0" class="kanit-medium h1 mb-0 cell-label-left">
+          {{ rows - y }}
+        </div>
+
+        <!-- Peça -->
+        <div *ngIf="piece" class="piece" cdkDrag #dragRef="cdkDrag" (cdkDragStarted)="onDragStart(x, y)"
+          (cdkDragEnded)="onDragEnd($event, x, y, dragRef)"
+          [ngClass]="['piece', piece.player === 'white' ? 'white-piece' : 'black-piece']"
+          [cdkDragDisabled]="!gameStarted">
+          <img class="img-piece"
+            [src]="'./icons/'+ (piece.player === 'black' ? 'black' : 'white') + piece.type + '.png'"
+            alt="{{ piece.type }}" />
+          <!-- <img class="img-piece" src="https://images.mubicdn.net/images/cast_member/2801/cache-590021-1600900173/image-w856.jpg" /> -->
+        </div>
       </div>
     </div>
   </div>
+
   <div *ngIf="moveWarning" class="move-warning">
     {{ moveWarning }}
   </div>
 
   <div class="board-controls">
     <p>Escolha o tamanho do tabuleiro:</p>
-
     <label>
       Linhas:
-      <input type="number" [(ngModel)]="inputRows" (input)="validateDimensions()" />
     </label>
     <div *ngIf="rowError" class="error-message">
       <small>{{ rowError }}</small>
     </div>
-
     <label>
       Colunas:
-      <input type="number" [(ngModel)]="inputCols" (input)="validateDimensions()" />
     </label>
     <div *ngIf="colError" class="error-message">
       <small>{{ colError }}</small>
     </div>
+    <div class="row justify-content-between">
+      <div class="col-md-6">
+        <div class="row d-flex bg-input-scale p-0 align-items-center">
+          <div class="col-md-2 py-1 text-center px-0">
+            <p class="kanit-medium m-0 px-0 text-secondary">Scale</p>
+          </div>
+          <div class="col-md-7 px-0 py-1 d-flex align-content-center align-items-center">
+            <label class="text-light mb-0 pt-0 pe-2">
+              X
+            </label>
+            <input type="text" class="w-100 p-1  bg-input-scale text-center" (input)="validateDimensions()"
+              (keypress)="restrictToNumbers($event)" [(ngModel)]="inputRows" placeholder="Rows" />
+            <label class="text-light mb-0 pt-0 px-2">
+              Y
+            </label>
+            <input type="text" class="w-100 p-1 bg-input-scale text-center" placeholder="Cols" [(ngModel)]="inputCols"
+              (keypress)="restrictToNumbers($event)" (input)="validateDimensions()" />
+          </div>
+          <div class="col-md-3">
+            <button class="border-start m-0 ps-3 rounded-0 border-secondary bg-transparent" (click)="applyBoardSize()"
+              [disabled]="dimensionError">
+              <img width="22" src="./icons/check.svg" alt="check" />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 text-end">
+        <button class="play-btn px-5 h-100" (click)="startGame()" [disabled]="!canStartGame">
+          <h6 class="kanit-medium m-0">Play</h6>
+        </button>
+      </div>
+    </div>
 
-    <button mat-raised-button color="primary" (click)="applyBoardSize()" [disabled]="dimensionError">
-      Aplicar
-    </button>
-    <button mat-raised-button color="primary" (click)="startGame()" [disabled]="!canStartGame">
-      Iniciar
-    </button>
   </div>
 </div>
