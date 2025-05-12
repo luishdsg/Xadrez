@@ -1,16 +1,37 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'phonk';
+  src: url('../public/fonts/PhonkRegular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 html,
 body {
   height: 100%;
 }
-label{
+
+label {
   font-size: 17px;
 }
+
 body {
   margin: 0;
   font-family: "Kanit", sans-serif;
   font-style: normal;
+
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
 }
 
 .kanit-light {
@@ -37,32 +58,14 @@ body {
   font-style: normal;
 }
 
-/* .main-content {
-  background-image: url('./app/assets/bgg.png'), url('https://grainy-gradients.vercel.app/noise.svg')  ;
-  background-position: center, center;
-  background-size: auto, auto;
-  background-repeat: no-repeat, no-repeat;
-} */
-.main-content:before {
-  content: "";
-  background-color: transparent;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 182px;
-  opacity: 0.12;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-
+.phonk {
+  font-family: 'phonk', sans-serif;
+  font-weight: 500;
+  font-style: normal;
 }
-.main-content {
-  background-image: url('./app/assets/bg.png');
-  background-position: top ;
-  background-size: contain;
-  background-repeat: no-repeat;
+
+.border-bottom-light {
+  border-bottom: 3px solid rgba(255, 255, 255, 0.164);
 }
 
 .top-left-corner {
@@ -84,4 +87,104 @@ body {
 .turn-indicator {
   font-weight: bold;
   font-size: 1.2rem;
+}
+
+.h30-px {
+  height: 30px;
+}
+
+.mat-mdc-dialog-surface {
+  background-color: transparent !important;
+  border-radius: 1rem !important;
+}
+
+.play-btn:before,
+.play-btn-disabled:before,
+.pattern-back-btn:before,
+.main-content:before {
+  content: "";
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  opacity: 0.15;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+.main-content:before {
+  position: absolute;
+}
+
+.main-content {
+  overflow: hidden;
+  width: 100vw !important;
+  height: fit-content !important;
+  min-height: 100vh;
+  background-image: url('./app/assets/bg.png');
+  background-position: bottom;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.board-content {
+  height: 100vh;
+}
+
+.play-btn {
+  background: radial-gradient(circle, #7D89C4 30%, #4967FE 100%);
+  background-position: top;
+  border: 2px solid #ffffff9f !important;
+  border-radius: 10px !important;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.play-btn-disabled {
+  background: #28282acb !important;
+  color: #5A5A5E !important;
+  border: none !important;
+}
+
+.play-btn-disabled h6 {
+  text-shadow: 0px 0px 5px #00000000 !important;
+}
+
+.play-btn h6,
+.pattern-back-btn h6 {
+  text-shadow: 0px 0px 5px #ffffff85;
+}
+
+.pattern-back-btn {
+  background: radial-gradient(circle, #32323391 30%, #00000096 100%);
+  background-position: top;
+  border: 2px solid #a7a7a78a !important;
+  border-radius: 10px !important;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.pattern-bg-input-scale {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.030) !important;
+  backdrop-filter: blur(50px);
+  border-radius: 9px;
+  color: rgba(255, 255, 255, 0.418);
+  border: 2px solid rgba(255, 255, 255, 0.182);
+}
+
+.pattern-bg-input-scale ::placeholder {
+  color: rgba(255, 255, 255, 0.418);
+}
+
+.pattern-bg-input-scale input[type="text"] {
+  border: 3px solid rgba(255, 255, 255, 0.182);
+  max-width: 81px;
+}
+
+.pattern-bg-input-scale input[type="text"]:focus {
+  border: 3px solid rgba(255, 255, 255, 0.281);
+  color: rgba(255, 255, 255, 0.63);
 }

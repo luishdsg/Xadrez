@@ -1,0 +1,10 @@
+.modal-win {
+  border: 3px solid rgba(255, 255, 255, 0.164);
+  background-color: rgba(255, 255, 255, 0.062) !important;
+  backdrop-filter: blur(20px);
+}
+
+.modal-content-bottom {
+  background-color: rgba(0, 0, 0, 0.404) !important;
+  backdrop-filter: blur(20px);
+}

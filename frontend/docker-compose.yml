@@ -13,6 +13,10 @@ services:
     volumes:
       - ./:/app
     working_dir: /app
+    environment:
+        - API_URL=http://localhost:3000/games
+    logging:
+      driver: "none"
     command: bash -c "npm install && npm install -g @angular/cli && ng serve --host 0.0.0.0"
     ports:
       - "4200:4200"

@@ -1,47 +1,86 @@
-.board {
-  display: grid;
+
+.piece {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: grab;
+  transition: transform 0.2s ease;
 }
 
-.board-wrapper {
-  display: inline-block;
-
+.img-piece {
+  width: 60%;
 }
 
 
-.justify-items-center {
-  justify-items: center;
+.header-cell-table {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+  background-color: #eee;
+  border: 1px solid #ccc;
 }
 
 .content-game {
-  width: fit-content;
   border: 2px solid rgba(255, 255, 255, 0.329);
   position: relative;
   background-color: transparent;
+  box-shadow: 0 0 22px 10px rgba(0, 0, 0, 0.589);
   overflow: hidden;
+  height: fit-content;
 }
 
-.black {
-  background-image: url('../../assets/blackzone.png');
+.Black {
+  background-image: url('../../assets/Blackzone.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
 }
 
-.white {
-  background-image: url('../../assets/whitezone.png');
+.White {
+  background-image: url('../../assets/Whitezone.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+.resizable {
+  background-color: #d0e4ff;
+  transition: width 0.3s;
 }
 
 .cell-table {
   opacity: .60;
   position: relative;
-  width: 102px;
-  height: 102px;
+  width: calc(100vw / 15);
+  height: calc(100vw / 15);
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .cell-table {
+    width: calc(100vw / 9);
+    height: calc(100vw / 9);
+  }
+}
+
+@media (max-width: 550px) {
+  .cell-table {
+    width: calc(100vw / 6.9);
+    height: calc(100vw / 6.9);
+  }
+
+  .content-controls {
+    max-width: 100% !important;
+  }
 }
 
 .cell-label-bottom {
@@ -70,7 +109,7 @@
 }
 
 .cell-table.white-moved {
-  background-image: url('../../assets/safezonewhite.png') !important;
+  background-image: url('../../assets/safezoneWhite.png') !important;
   background-position: center;
   background-size: auto;
   background-repeat: no-repeat;
@@ -86,52 +125,6 @@
   transition: background-color 0.5s ease;
 }
 
-
-
-.move-warning {
-  color: red;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.row-table {
-  display: contents;
-  display: flex;
-
-}
-
-.error-message {
-  color: red;
-  font-size: 0.9em;
-  margin-top: 4px;
-}
-
-.piece {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  cursor: grab;
-  transition: transform 0.2s ease;
-}
-
-.img-piece {
-  width: 43px;
-}
-
-
-.header-cell-table {
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  line-height: 40px;
-  font-weight: bold;
-  background-color: #eee;
-  border: 1px solid #ccc;
-}
 
 .corner-cell-table {
   width: 40px;
@@ -155,42 +148,14 @@
 
 .cell-table.selected {
   background-color: rgba(128, 0, 128, 0.3) !important;
-  /* roxo claro */
 }
 
-.play-btn:before {
-  content: "";
-  background-color: transparent;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 182px;
-  opacity: 0.12;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
+.content-controls {
+  max-width: 357px;
+}
 
-}
-.play-btn {
-  background: radial-gradient(circle, #7D89C4 30%, #4967FE 100%);
-  background-position: top ;
-  border: 2px solid #ffffff9f !important;
-  border-radius: 10px !important;
-  background-size: contain;
-
-  background-repeat: no-repeat;
-}
-.play-btn h6{
-   text-shadow: 0px 0px 5px #ffffff;
-}
-.bg-input-scale {
-  outline: none;
-  background-color: rgba(255, 255, 255, 0.040) !important;
-  backdrop-filter: blur(50px);
-  border-radius: 9px;
-  color:  rgba(255, 255, 255, 0.418);
-  border: 2px solid rgba(255, 255, 255, 0.182);
+.board-controls {
+  aspect-ratio: 16 / 1;
 }
 
 .board-controls button {
@@ -205,4 +170,10 @@
 
 .board-controls button:hover {
   background-color: #666;
+}
+
+.footer-logo {
+  bottom: 5%;
+  aspect-ratio: "1 / 1";
+  z-index: -1;
 }

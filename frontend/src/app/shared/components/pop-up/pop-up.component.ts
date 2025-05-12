@@ -9,8 +9,15 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrl: './pop-up.component.css'
 })
 export class PopUpComponent {
-  constructor(public dialogRef: MatDialogRef<PopUpComponent>, @Inject(MAT_DIALOG_DATA) public data: { player: string, type: string }) { }
+  constructor(
+    public dialogRef: MatDialogRef<PopUpComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { player: string, type: string }
+    ) { }
   close() {
     this.dialogRef.close();
+    window.location.reload();
+  }
+  restart() {
+    this.dialogRef.close('restart');
   }
 }

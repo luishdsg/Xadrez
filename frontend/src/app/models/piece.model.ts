@@ -1,5 +1,7 @@
+import { PieceType } from "./piceType.model";
+
 export interface Piece {
-  type: 'Developer' | 'Designer' | 'ProductOwner';
-  color: 'white' | 'black';
-  icon: string;
+  type: PieceType;
+  player: 'White' | 'Black';
+  icon?: string;
 }
