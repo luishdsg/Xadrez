@@ -1,0 +1,83 @@
+.hamburger {
+  position: fixed;
+  top: 20px;
+  z-index: 100;
+  right: 20px;
+  cursor: pointer;
+}
+
+.bar {
+  width: 30px;
+  height: 3px;
+  background-color: #333;
+  margin-bottom: 5px;
+  transition: all 0.3s;
+}
+
+.hamburger:hover .bar {
+  background-color: #666;
+}
+
+
+.sidebar-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 25em;
+  height: 100vh;
+  background-color: #00000044;
+  border-left: 1px solid rgba(255, 255, 255, 0.158);
+  transform: translateX(100%);
+  backdrop-filter: blur(10px);
+  transition: transform 0.5s;
+  z-index: 10;
+  padding: 20px;
+}
+
+.sidebar-menu.open {
+  transform: translateX(0);
+}
+
+.sidebar-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  margin-bottom: 20px;
+}
+
+.sidebar-menu a {
+  text-decoration: none;
+  color: #333;
+}
+
+.sidebar-menu a:hover {
+  color: #666;
+}
+
+
+.game-item {
+  white-space: nowrap; /* impede a quebra de linha */
+  text-overflow: ellipsis; 
+  position: relative;
+  transition: transform 0.3s;
+}
+
+.game-item:hover {
+  transform: translateX(-50%);
+}
+
+.delete-button {
+  right: -50%;
+  border: none;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
+.game-item:hover .delete-button {
+  opacity: 1;
+}

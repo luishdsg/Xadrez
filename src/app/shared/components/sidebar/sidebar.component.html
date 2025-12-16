@@ -1,0 +1,30 @@
+<div class="hamburger" (click)="toggleMenu()">
+  <div class="bar"></div>
+  <div class="bar"></div>
+  <div class="bar"></div>
+</div>
+<div class="sidebar-menu" [class.open]="isOpen">
+  <p class="phonk text-secondary">REVIEW</p>
+  <div class="w-100">
+    <p *ngIf="networkError" class="kanit-medium text-light">Could not connect to the server. Please check the
+      connection.</p>
+    <p *ngIf="games.length === 0" class="kanit-medium text-secondary">no reviews yet</p>
+  </div>
+  <div *ngFor="let game of games"
+    class="w-100 text-start mb-3 p-2 bg-transparent border-secondary border game-item rounded-4">
+    <p class="kanit-extrabold mb-0 text-secondary">{{game.type}}
+    </p>
+    <div class="w-100 d-flex">
+      <p class="phonk mb-0">WON</p>
+      <small>with</small>
+      <p class="phonk mb-0">{{game.winner}}</p>
+    </div>
+    <div class="w-100 border-top border-secondary">
+      <small class="text-secondary kanit-light">
+        {{ game.time ? (game.time | date:'HH:mm · d MMM yyyy') : 'Date unknown' }}
+      </small>
+    </div>
+    <button class="position-absolute bg-transparent w-50 top-0 h-100 delete-button" (click)="deleteGame(game)"><small
+        class="bg-danger p-3 rounded-pill">🗑️</small></button>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+services:
+  json-server:
+    image: node:22
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: bash -c "npm install -g json-server && json-server --watch db.json --port 3000"
+    ports:
+      - "3000:3000"
+
+  angular:
+    image: node:22
+    volumes:
+      - ./:/app
+    working_dir: /app
+    environment:
+        - API_URL=http://localhost:3000/games
+    logging:
+      driver: "none"
+    command: bash -c "npm install && npm install -g @angular/cli && ng serve --host 0.0.0.0"
+    ports:
+      - "4200:4200"
+    depends_on:
+      - json-server

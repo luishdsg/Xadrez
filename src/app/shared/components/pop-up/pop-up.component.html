@@ -1,0 +1,14 @@
+<div mat-dialog-content class="overflow-hidden rounded-4 modal-win">
+  <div class="row pt-5 text-center">
+    <div class="col-12 text-center border-bottom-light">
+      <img src="./icons/star.png" width="100px" class="pb-1 pe-1" />
+      <p class="phonk p-4 text-center">
+       {{ data.player }} PIECES WON
+      </p>
+    </div>
+    <div class="col-12 p-5 modal-content-bottom h-100 d-flex text-center justify-content-evenly">
+      <button (click)="close()" class="pattern-back-btn py-2 px-3"><h6 class="mb-0 kanit-medium  text-light">Go Back To Home</h6></button>
+      <button (click)="restart()" class="play-btn py-2 px-3"><h6 class="mb-0 kanit-medium  text-light">Start New Match</h6></button>
+    </div>
+  </div>
+</div>

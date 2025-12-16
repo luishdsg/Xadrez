@@ -1,0 +1,179 @@
+
+.piece {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: grab;
+  transition: transform 0.2s ease;
+}
+
+.img-piece {
+  width: 60%;
+}
+
+
+.header-cell-table {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  font-weight: bold;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+
+.content-game {
+  border: 2px solid rgba(255, 255, 255, 0.329);
+  position: relative;
+  background-color: transparent;
+  box-shadow: 0 0 22px 10px rgba(0, 0, 0, 0.589);
+  overflow: hidden;
+  height: fit-content;
+}
+
+.black {
+  background-image: url('../../../assets/blackzone.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.white {
+  background-image: url('../../../assets/whitezone.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.resizable {
+  background-color: #d0e4ff;
+  transition: width 0.3s;
+}
+
+.cell-table {
+  opacity: .60;
+  position: relative;
+  width: calc(100vw / 15);
+  height: calc(100vw / 15);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .cell-table {
+    width: calc(100vw / 9);
+    height: calc(100vw / 9);
+  }
+}
+
+@media (max-width: 550px) {
+  .cell-table {
+    width: calc(100vw / 6.9);
+    height: calc(100vw / 6.9);
+  }
+
+  .content-controls {
+    max-width: 100% !important;
+  }
+}
+
+.cell-label-bottom {
+  position: absolute;
+  right: 5%;
+  bottom: 5%;
+  transform: translateX(-50%);
+  font-size: 11px;
+}
+
+.cell-label-left {
+  position: absolute;
+  left: 10%;
+  top: 15%;
+  transform: translateY(-50%);
+  font-size: 11px;
+}
+
+.cell-table-label {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  font-size: 10px;
+  color: #444;
+  pointer-events: none;
+}
+
+.cell-table.white-moved {
+  background-image: url('../../../assets/safezonewhite.png') !important;
+  background-position: center;
+  background-size: auto;
+  background-repeat: no-repeat;
+  transition: background-color 0.5s ease;
+}
+
+.cell-table.black-moved {
+  background-image: url('../../../assets/safezone.png') !important;
+  background-position: center;
+  background-size: auto;
+  border: 1px solid rgba(145, 94, 0, 0.377);
+  background-repeat: no-repeat;
+  transition: background-color 0.5s ease;
+}
+
+
+.corner-cell-table {
+  width: 40px;
+  height: 40px;
+}
+
+
+.cell-table.highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../../assets/overlay.png') !important;
+  background-position: center;
+  background-size: auto;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+.cell-table.selected {
+  background-color: rgba(128, 0, 128, 0.3) !important;
+}
+
+.content-controls {
+  max-width: 357px;
+}
+
+.board-controls {
+  aspect-ratio: 16 / 1;
+}
+
+.board-controls button {
+  margin-right: 0.5rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #444;
+  color: #fff;
+  cursor: pointer;
+}
+
+.board-controls button:hover {
+  background-color: #666;
+}
+
+.footer-logo {
+  bottom: 5%;
+  aspect-ratio: "1 / 1";
+  z-index: -1;
+}
