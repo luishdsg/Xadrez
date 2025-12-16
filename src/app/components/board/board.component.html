@@ -17,10 +17,10 @@
           <!-- Peça -->
           <div *ngIf="piece" class="piece" cdkDrag #dragRef="cdkDrag" (cdkDragStarted)="onDragStart(x, y)"
             (cdkDragEnded)="onDragEnd($event, x, y, dragRef)"
-            [ngClass]="['piece', piece.player === 'White' ? 'White-piece' : 'Black-piece']"
+            [ngClass]="['piece', piece.player === 'white' ? 'White-piece' : 'Black-piece']"
             [cdkDragDisabled]="!gameStarted">
             <img class="img-piece"
-              [src]="'./icons/'+ (piece.player === 'Black' ? 'Black' : 'White') + piece.type + '.png'"
+              [src]="getPieceImage(piece)"
               alt="{{ piece.type }}" />
           </div>
         </div>

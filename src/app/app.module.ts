@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { BoardComponent } from './components/board/board.component';
 import { PieceComponent } from './components/piece/piece.component';
+import { NgOptimizedImage } from '@angular/common';
 import { PopUpComponent } from './shared/components/pop-up/pop-up.component';
 import { SidebarComponent } from './shared/components/sidebar/sidebar.component';
 
@@ -23,6 +24,7 @@ registerLocaleData(localePt, 'pt');
     BoardComponent,
     SidebarComponent,
     CommonModule,
+    NgOptimizedImage,
     PieceComponent,
     PopUpComponent,
     BrowserAnimationsModule,

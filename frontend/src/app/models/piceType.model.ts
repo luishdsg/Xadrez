@@ -1,1 +1,0 @@
-export type PieceType = 'developer' | 'designer' | 'product-owner';

@@ -34,7 +34,7 @@ export class BoardComponent {
   lastTargetCell?: { x: number; y: number; };
   rowError: string = '';
   colError: string = '';
-  currentTurn: string = 'White';
+  currentTurn: string = 'white';
   highlights = signal<boolean[][]>([]);
   moveWarning: string | null = null;
 
@@ -53,7 +53,7 @@ export class BoardComponent {
     this.canStartGame = false;
     this.gameStarted = true;
     this.resetBoard(this.rows, this.cols);
-    this.currentTurn = 'White';
+    this.currentTurn = 'white';
   }
 
   applyBoardSize() {
@@ -70,17 +70,21 @@ export class BoardComponent {
     this.colError = !isValid(this.inputCols) ? 'Please use values between 6 - 12.' : '';
   }
 
+getPieceImage(piece: Piece){
+  const color = piece.player === 'black' ? 'black' : 'white';
+  return `./icons/${color}${piece.type}.png`;
+} 
 
   resetBoard(rows: number, cols: number): void {
     this.rows = rows;
     this.cols = cols;
     this.gameService.resetBoard(rows, cols);
     this.board.set(this.gameService.getBoard());
-    this.currentTurn = 'White';
+    this.currentTurn = 'white';
     const boardSetup = this.board().map((row, y) =>
       row.map((piece) => {
         if (piece) {
-          piece.player = y < rows / 2 ? 'Black' : 'White';
+          piece.player = y < rows / 2 ? 'black' : 'white';
         }
         return piece;
       })
@@ -107,7 +111,7 @@ export class BoardComponent {
     const piece = this.board()[y][x];
     if (!piece) return;
     if (piece.player !== this.currentTurn) {
-      this.moveWarning = `It's the ${this.currentTurn === 'White' ? 'White' : 'Black'} pieces' turn.`;
+      this.moveWarning = `It's the ${this.currentTurn === 'white' ? 'white' : 'black'} pieces' turn.`;
       return;
     }
     this.moveWarning = null;
@@ -168,12 +172,12 @@ export class BoardComponent {
     const boardCopy = this.board().map(row => [...row]);
     const targetPiece = boardCopy[targetY][targetX];
     if (targetPiece && targetPiece.player !== piece.player) {
-      if (targetPiece.type === 'product-owner') {
+      if (targetPiece.type === 'productowner') {
         const gameData: GameData = {
           id: new Date().getTime().toString(),
           type: piece.type,
           time: new Date(),
-          winner: piece.player === 'White' ? 'White' : 'Black',
+          winner: piece.player === 'white' ? 'white' : 'black',
         };
 
         this.gameService.saveGameState(gameData).subscribe(response => {
@@ -199,7 +203,7 @@ export class BoardComponent {
     this.selectedPiece.set(undefined);
     this.validMoves.set([]);
     this.clearHighlights();
-    this.currentTurn = this.currentTurn === 'White' ? 'Black' : 'White';
+    this.currentTurn = this.currentTurn === 'white' ? 'black' : 'white';
   }
 
   clearHighlights() {
@@ -210,7 +214,7 @@ export class BoardComponent {
   }
 
   getCellClass(x: number, y: number): string {
-    return (x + y) % 2 === 0 ? 'White' : 'Black';
+    return (x + y) % 2 === 0 ? 'white' : 'black';
   }
 
   isHighlighted(x: number, y: number): boolean {

@@ -31,11 +31,11 @@ export class GameService {
     // Verifica se há espaço suficiente para colocar as peças sem erro
     if (this.cols >= 3) {
       // RED na primeira linha
-      board[0][0] = { type: 'developer', player: 'White' };
+      board[0][0] = { type: 'developer', player: 'white' };
       // Black na última linha
-      board[this.rows - 1][this.cols - 3] = { type: 'developer', player: 'Black' };
-      board[this.rows - 1][this.cols - 2] = { type: 'developer', player: 'Black' };
-      board[this.rows - 1][this.cols - 1] = { type: 'product-owner', player: 'Black' };
+      board[this.rows - 1][this.cols - 3] = { type: 'developer', player: 'black' };
+      board[this.rows - 1][this.cols - 2] = { type: 'developer', player: 'black' };
+      board[this.rows - 1][this.cols - 1] = { type: 'productowner', player: 'black' };
     }
 
     return board;
@@ -109,19 +109,19 @@ export class GameService {
   }
 
   private placePieces(board: (Piece | null)[][]): void {
-    const pieceTypes: PieceType[] = ['product-owner', 'developer', 'designer'];
+    const pieceTypes: PieceType[] = ['productowner', 'developer', 'designer'];
     const lastCol = board[0].length - 1;
     for (let i = 0; i < pieceTypes.length; i++) {
       board[0][lastCol - i] = {
         type: pieceTypes[i],
-        player: 'Black',
+        player: 'black',
       };
     }
     const lastRow = board.length - 1;
     for (let i = 0; i < pieceTypes.length; i++) {
       board[lastRow][i] = {
         type: pieceTypes[i],
-        player: 'White',
+        player: 'white',
       };
     }
   }
@@ -152,7 +152,7 @@ export class GameService {
         return this.getDeveloperMoves(x, y, piece, board, rows, cols);
       case 'designer':
         return this.getDesignerMoves(x, y, piece, board, rows, cols);
-      case 'product-owner':
+      case 'productowner':
         return this.getProductOwnerMoves(x, y, piece, board, rows, cols);
     }
   }

@@ -35,15 +35,15 @@
   height: fit-content;
 }
 
-.Black {
-  background-image: url('../../assets/Blackzone.png');
+.black {
+  background-image: url('../../../assets/blackzone.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
 }
 
-.White {
-  background-image: url('../../assets/Whitezone.png');
+.white {
+  background-image: url('../../../assets/whitezone.png');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -109,7 +109,7 @@
 }
 
 .cell-table.white-moved {
-  background-image: url('../../assets/safezoneWhite.png') !important;
+  background-image: url('../../../assets/safezonewhite.png') !important;
   background-position: center;
   background-size: auto;
   background-repeat: no-repeat;
@@ -117,7 +117,7 @@
 }
 
 .cell-table.black-moved {
-  background-image: url('../../assets/safezone.png') !important;
+  background-image: url('../../../assets/safezone.png') !important;
   background-position: center;
   background-size: auto;
   border: 1px solid rgba(145, 94, 0, 0.377);
@@ -139,7 +139,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../../assets/overlay.png') !important;
+  background-image: url('../../../assets/overlay.png') !important;
   background-position: center;
   background-size: auto;
   background-repeat: no-repeat;
